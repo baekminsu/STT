@@ -1,0 +1,5 @@
+openai-whisper
+psutil
+# torch 는 openai-whisper 가 의존성으로 함께 설치합니다.
+# NVIDIA GPU(CUDA) 가속을 쓰려면 CUDA 빌드 torch 를 별도로 설치하세요:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121

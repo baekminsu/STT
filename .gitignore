@@ -1,0 +1,27 @@
+# Claude Code
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# 오디오 / 결과물 (회의 녹음·전사본은 올리지 않음)
+input/
+output/
+*.m4a
+*.mp3
+*.wav
+*.txt
+!requirements.txt
+
+# ffmpeg 바이너리 (직접 받는 것)
+ffmpeg/
+
+# 로그
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
