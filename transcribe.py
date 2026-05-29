@@ -36,6 +36,15 @@ _FFMPEG_BIN = BASE_DIR / "ffmpeg" / "bin"
 if _FFMPEG_BIN.is_dir():
     os.environ["PATH"] = str(_FFMPEG_BIN) + os.pathsep + os.environ.get("PATH", "")
 
+# verbose 실시간 출력에 콘솔 기본 인코딩(예: 한글 Windows 의 cp949)으로 표현 못 하는
+# 글자가 섞여도 UnicodeEncodeError 로 죽지 않도록 에러 처리만 'replace' 로 완화한다.
+# (인코딩은 그대로 두므로 한글은 정상 표시되고, txt 결과는 항상 utf-8 로 저장됨)
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 # 모델별 대략적인 GPU VRAM 요구량(GB) — 자동 선정 기준
 MODEL_VRAM_GB = {
     "tiny": 1,
@@ -114,8 +123,8 @@ def fmt_ts(seconds: float) -> str:
 
 
 def transcribe_file(model, src: Path, dst: Path, with_timestamps: bool, use_fp16: bool) -> None:
-    print(f"\n[처리 중] {src.name}")
-    result = model.transcribe(str(src), language="ko", verbose=False, fp16=use_fp16)
+    print(f"\n[처리 중] {src.name} (변환되는 구간이 아래에 실시간으로 표시됩니다)")
+    result = model.transcribe(str(src), language="ko", verbose=True, fp16=use_fp16)
 
     dst.parent.mkdir(parents=True, exist_ok=True)
     with dst.open("w", encoding="utf-8") as f:
